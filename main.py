@@ -98,4 +98,24 @@ def get_dashboard_stats():
             "recent_trips": trips.data[:5] if trips.data else []
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))@app.post("/api/customers/add")
+def add_customer(
+    client_name: str = Form(...),
+    phone: str = Form(...),
+    billing_type: str = Form(...)
+):
+    row = [client_name, "", phone, "", billing_type, ""]
+    worksheet = get_sheet_tab("Clients_Master")
+    worksheet.append_row(row)
+    return {"status": "Success", "message": "Customer added to Google Sheet!"}
+
+@app.post("/api/vendors/add")
+def add_vendor(
+    vendor_name: str = Form(...),
+    assigned_vehicle: str = Form(...),
+    fuel_terms: str = Form(...)
+):
+    row = [vendor_name, "", assigned_vehicle, "Vendor Fleet", fuel_terms, ""]
+    worksheet = get_sheet_tab("Vendors_Master")
+    worksheet.append_row(row)
+    return {"status": "Success", "message": "Vendor added to Google Sheet!"}
